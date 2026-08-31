@@ -26,9 +26,9 @@ tests colocated as `_test.go` next to the code they cover, no separate `tests/` 
 
 **Purpose**: Project initialization
 
-- [ ] T001 Initialize Go module at repo root: `go mod init github.com/jmirandev/delivery-effort-estimator` (creates `go.mod`, pinned to `go 1.27`)
-- [ ] T002 [P] Add SQLite dependency: `go get modernc.org/sqlite` (updates `go.mod`/`go.sum`)
-- [ ] T003 [P] Add a `Makefile` at repo root with `fmt`, `vet`, `test`, `build` targets wrapping `gofmt -l .`, `go vet ./...`, `go test ./...`, `go build ./...`
+- [X] T001 Initialize Go module at repo root: `go mod init github.com/jmirandev/delivery-effort-estimator` (creates `go.mod`, pinned to `go 1.27`)
+- [X] T002 [P] Add SQLite dependency: `go get modernc.org/sqlite` (updates `go.mod`/`go.sum`)
+- [X] T003 [P] Add a `Makefile` at repo root with `fmt`, `vet`, `test`, `build` targets wrapping `gofmt -l .`, `go vet ./...`, `go test ./...`, `go build ./...`
 
 **Checkpoint**: `go build ./...` runs (with no source files yet, trivially succeeds) and dependency is resolvable.
 
@@ -40,13 +40,13 @@ tests colocated as `_test.go` next to the code they cover, no separate `tests/` 
 
 **⚠️ CRITICAL**: No user story task may start until this phase is complete
 
-- [ ] T004 Create `EstimationFeatures` struct (7 fields per data-model.md) in `internal/estimation/features.go`, with a `Validate() (adjustments []string, err error)` method skeleton (real clamping/missing-field logic lands in Phase 3, T014)
-- [ ] T005 [P] Create `Prediction`, `EstimationRecord`, `OutcomeRecord`, `ErrorReport`, `DimensionError` structs (data-model.md) in `internal/record/types.go`
-- [ ] T006 Create `EstimationRepository` and `OutcomeRepository` interfaces in `internal/record/repository.go` — `EstimationRepository` exposes only `Save(EstimationRecord) error` and `Get(id string) (EstimationRecord, bool, error)` (no `Update`, per Constitution Principle VIII); `OutcomeRepository` exposes only `Save(OutcomeRecord) error` and `GetByEstimationID(id string) (OutcomeRecord, bool, error)`
-- [ ] T007 Create append-only schema migration in `internal/storage/sqlite/migrations.go`: `estimation_records` and `outcome_records` tables per data-model.md, with `UNIQUE(estimation_id)` on `outcome_records` (FR-013)
-- [ ] T008 Implement `internal/storage/sqlite/sqlite.go`: SQLite-backed implementation of both repository interfaces from T006, opening the DB file (default `./data/estimator.db`, creating the parent directory if missing) and running the T007 migration on startup
-- [ ] T009 [P] Create `cmd/estimatorctl/main.go` skeleton: argument parsing that dispatches to `estimate` / `record-outcome` / `error-report` subcommands (each returning a placeholder "not implemented" error for now)
-- [ ] T010 [P] Create `cmd/estimatord/main.go` skeleton: `net/http` server registering the four routes from `contracts/http.md` (each a placeholder handler returning 501 for now)
+- [X] T004 Create `EstimationFeatures` struct (7 fields per data-model.md) in `internal/estimation/features.go`, with a `Validate() (adjustments []string, err error)` method skeleton (real clamping/missing-field logic lands in Phase 3, T014)
+- [X] T005 [P] Create `Prediction`, `EstimationRecord`, `OutcomeRecord`, `ErrorReport`, `DimensionError` structs (data-model.md) in `internal/record/types.go`
+- [X] T006 Create `EstimationRepository` and `OutcomeRepository` interfaces in `internal/record/repository.go` — `EstimationRepository` exposes only `Save(EstimationRecord) error` and `Get(id string) (EstimationRecord, bool, error)` (no `Update`, per Constitution Principle VIII); `OutcomeRepository` exposes only `Save(OutcomeRecord) error` and `GetByEstimationID(id string) (OutcomeRecord, bool, error)`
+- [X] T007 Create append-only schema migration in `internal/storage/sqlite/migrations.go`: `estimation_records` and `outcome_records` tables per data-model.md, with `UNIQUE(estimation_id)` on `outcome_records` (FR-013)
+- [X] T008 Implement `internal/storage/sqlite/sqlite.go`: SQLite-backed implementation of both repository interfaces from T006, opening the DB file (default `./data/estimator.db`, creating the parent directory if missing) and running the T007 migration on startup
+- [X] T009 [P] Create `cmd/estimatorctl/main.go` skeleton: argument parsing that dispatches to `estimate` / `record-outcome` / `error-report` subcommands (each returning a placeholder "not implemented" error for now)
+- [X] T010 [P] Create `cmd/estimatord/main.go` skeleton: `net/http` server registering the four routes from `contracts/http.md` (each a placeholder handler returning 501 for now)
 
 **Checkpoint**: Foundation ready — shared types, storage, and entrypoints exist; user story phases can now proceed.
 
@@ -62,16 +62,16 @@ with the same input and confirm identical `prediction` content both times.
 
 ### Tests for User Story 1 ⚠️ write first, confirm they fail
 
-- [ ] T011 [P] [US1] Table-driven tests for the deterministic formulas (HumanEffort, AIEffort, VerificationEffort, IntegrationEffort, DeliveryEffort, Confidence cap, Prediction Interval floor, ExpectedDuration, ExpectedAICost + zero-cost flag) from research.md, in `internal/estimation/model_test.go`
-- [ ] T012 [P] [US1] Tests for `EstimationFeatures.Validate()`: missing-dimension rejection (FR-002) and out-of-range clamping with adjustment message (FR-003), in `internal/estimation/features_test.go`
+- [X] T011 [P] [US1] Table-driven tests for the deterministic formulas (HumanEffort, AIEffort, VerificationEffort, IntegrationEffort, DeliveryEffort, Confidence cap, Prediction Interval floor, ExpectedDuration, ExpectedAICost + zero-cost flag) from research.md, in `internal/estimation/model_test.go`
+- [X] T012 [P] [US1] Tests for `EstimationFeatures.Validate()`: missing-dimension rejection (FR-002) and out-of-range clamping with adjustment message (FR-003), in `internal/estimation/features_test.go`
 
 ### Implementation for User Story 1
 
-- [ ] T013 [US1] Implement `Predict(EstimationFeatures) Prediction` in `internal/estimation/model.go` per research.md formulas, satisfying T011 (depends on T004, T005, T011)
-- [ ] T014 [US1] Implement real clamping/missing-field logic in `EstimationFeatures.Validate()` in `internal/estimation/features.go`, satisfying T012 (depends on T012)
-- [ ] T015 [US1] Implement `Service.Estimate(workItemID string, features EstimationFeatures) (EstimationRecord, error)` in `internal/record/service.go`: calls `Validate`, calls `Predict`, assembles an `EstimationRecord` (`model_version = "v1-linear"`, `calibration_version = "uncalibrated"`, `assumptions` populated from any clamps), persists via `EstimationRepository.Save` (depends on T013, T014, T006, T008)
-- [ ] T016 [US1] Wire `estimatorctl estimate --work-item --features` to `Service.Estimate`, printing the resulting `EstimationRecord` as JSON on success or a structured error (`missing_feature`/`invalid_json`) on stderr with exit 1, in `cmd/estimatorctl/main.go` (depends on T015, T009; contracts/cli.md)
-- [ ] T017 [US1] Wire `POST /work-items/{workItemId}/estimations` to `Service.Estimate`, returning `201` + `EstimationRecord` JSON or `400` + structured error, in `cmd/estimatord/main.go` (depends on T015, T010; contracts/http.md)
+- [X] T013 [US1] Implement `Predict(EstimationFeatures) Prediction` in `internal/estimation/model.go` per research.md formulas, satisfying T011 (depends on T004, T005, T011)
+- [X] T014 [US1] Implement real clamping/missing-field logic in `EstimationFeatures.Validate()` in `internal/estimation/features.go`, satisfying T012 (depends on T012)
+- [X] T015 [US1] Implement `Service.Estimate(workItemID string, features EstimationFeatures) (EstimationRecord, error)` in `internal/record/service.go`: calls `Validate`, calls `Predict`, assembles an `EstimationRecord` (`model_version = "v1-linear"`, `calibration_version = "uncalibrated"`, `assumptions` populated from any clamps), persists via `EstimationRepository.Save` (depends on T013, T014, T006, T008)
+- [X] T016 [US1] Wire `estimatorctl estimate --work-item --features` to `Service.Estimate`, printing the resulting `EstimationRecord` as JSON on success or a structured error (`missing_feature`/`invalid_json`) on stderr with exit 1, in `cmd/estimatorctl/main.go` (depends on T015, T009; contracts/cli.md)
+- [X] T017 [US1] Wire `POST /work-items/{workItemId}/estimations` to `Service.Estimate`, returning `201` + `EstimationRecord` JSON or `400` + structured error, in `cmd/estimatord/main.go` (depends on T015, T010; contracts/http.md)
 
 **Checkpoint**: User Story 1 fully functional — quickstart.md Scenario 1 passes.
 
@@ -88,14 +88,14 @@ and confirm two distinct ids exist.
 
 ### Tests for User Story 2 ⚠️ write first, confirm they fail
 
-- [ ] T018 [P] [US2] Test in `internal/record/service_test.go`: two `Estimate` calls for the same `workItemID` produce two `EstimationRecord`s with different `id`s and both remain independently retrievable
-- [ ] T019 [P] [US2] Test in `internal/storage/sqlite/sqlite_test.go`: `EstimationRepository` has no method capable of mutating a saved row (compile-time interface check) and `Get` after `Save` returns byte-identical content
+- [X] T018 [P] [US2] Test in `internal/record/service_test.go`: two `Estimate` calls for the same `workItemID` produce two `EstimationRecord`s with different `id`s and both remain independently retrievable
+- [X] T019 [P] [US2] Test in `internal/storage/sqlite/sqlite_test.go`: `EstimationRepository` has no method capable of mutating a saved row (compile-time interface check) and `Get` after `Save` returns byte-identical content
 
 ### Implementation for User Story 2
 
-- [ ] T020 [US2] Implement `Service.GetEstimation(id string) (EstimationRecord, error)` in `internal/record/service.go`, returning a structured `unknown_estimation_id` error when absent (depends on T006, T008)
-- [ ] T021 [US2] Wire `GET /estimations/{estimationId}` to `Service.GetEstimation` (`200` + record, or `404`) in `cmd/estimatord/main.go` (depends on T020, T017)
-- [ ] T022 [US2] Add `estimatorctl get --estimation-id` command wired to `Service.GetEstimation`, for the manual reproducibility check in quickstart.md Scenario 2, in `cmd/estimatorctl/main.go` (depends on T020, T016)
+- [X] T020 [US2] Implement `Service.GetEstimation(id string) (EstimationRecord, error)` in `internal/record/service.go`, returning a structured `unknown_estimation_id` error when absent (depends on T006, T008)
+- [X] T021 [US2] Wire `GET /estimations/{estimationId}` to `Service.GetEstimation` (`200` + record, or `404`) in `cmd/estimatord/main.go` (depends on T020, T017)
+- [X] T022 [US2] Add `estimatorctl get --estimation-id` command wired to `Service.GetEstimation`, for the manual reproducibility check in quickstart.md Scenario 2, in `cmd/estimatorctl/main.go` (depends on T020, T016)
 
 **Checkpoint**: User Stories 1 and 2 both work independently — quickstart.md Scenario 2 passes.
 
@@ -111,16 +111,16 @@ error report, then confirm a second `record-outcome` for the same id is rejected
 
 ### Tests for User Story 3 ⚠️ write first, confirm they fail
 
-- [ ] T023 [P] [US3] Tests in `internal/storage/sqlite/sqlite_test.go`: `OutcomeRepository.Save` rejects a second outcome for the same `estimation_id` (unique constraint from T007) and `Service`-level unknown-`estimation_id` handling
-- [ ] T024 [P] [US3] Tests in `internal/estimation/errorreport_test.go`: `Compute(record, outcome)` returns correct `absolute_error`/`relative_error`/`bias` per dimension listed in data-model.md, including `relative_error == nil` when `predicted == 0`
+- [X] T023 [P] [US3] Tests in `internal/storage/sqlite/sqlite_test.go`: `OutcomeRepository.Save` rejects a second outcome for the same `estimation_id` (unique constraint from T007) and `Service`-level unknown-`estimation_id` handling
+- [X] T024 [P] [US3] Tests in `internal/estimation/errorreport_test.go`: `Compute(record, outcome)` returns correct `absolute_error`/`relative_error`/`bias` per dimension listed in data-model.md, including `relative_error == nil` when `predicted == 0`
 
 ### Implementation for User Story 3
 
-- [ ] T025 [US3] Implement `Compute(EstimationRecord, OutcomeRecord) ErrorReport` in `internal/estimation/errorreport.go` per research.md's raw-delta approach, satisfying T024 (depends on T024, T005)
-- [ ] T026 [US3] Implement `Service.RecordOutcome(estimationID string, outcome OutcomeRecord) (OutcomeRecord, error)` in `internal/record/service.go`: rejects unknown `estimationID` (`unknown_estimation_id`) and an existing outcome (`outcome_already_recorded`), else persists via `OutcomeRepository.Save` (depends on T023, T006, T008)
-- [ ] T027 [US3] Implement `Service.ErrorReport(estimationID string) (ErrorReport, error)` combining the stored `EstimationRecord`, its `OutcomeRecord` (error if none — `no_outcome_recorded`), and `estimation.Compute` (depends on T025, T026)
-- [ ] T028 [US3] Wire `estimatorctl record-outcome` and `estimatorctl error-report` subcommands to `Service.RecordOutcome`/`Service.ErrorReport` in `cmd/estimatorctl/main.go` (depends on T026, T027, T009; contracts/cli.md)
-- [ ] T029 [US3] Wire `POST /estimations/{id}/outcome` (`201`/`404`/`409`) and `GET /estimations/{id}/error-report` (`200`/`404`) in `cmd/estimatord/main.go` (depends on T026, T027, T010; contracts/http.md)
+- [X] T025 [US3] Implement `Compute(EstimationRecord, OutcomeRecord) ErrorReport` in `internal/estimation/errorreport.go` per research.md's raw-delta approach, satisfying T024 (depends on T024, T005)
+- [X] T026 [US3] Implement `Service.RecordOutcome(estimationID string, outcome OutcomeRecord) (OutcomeRecord, error)` in `internal/record/service.go`: rejects unknown `estimationID` (`unknown_estimation_id`) and an existing outcome (`outcome_already_recorded`), else persists via `OutcomeRepository.Save` (depends on T023, T006, T008)
+- [X] T027 [US3] Implement `Service.ErrorReport(estimationID string) (ErrorReport, error)` combining the stored `EstimationRecord`, its `OutcomeRecord` (error if none — `no_outcome_recorded`), and `estimation.Compute` (depends on T025, T026)
+- [X] T028 [US3] Wire `estimatorctl record-outcome` and `estimatorctl error-report` subcommands to `Service.RecordOutcome`/`Service.ErrorReport` in `cmd/estimatorctl/main.go` (depends on T026, T027, T009; contracts/cli.md)
+- [X] T029 [US3] Wire `POST /estimations/{id}/outcome` (`201`/`404`/`409`) and `GET /estimations/{id}/error-report` (`200`/`404`) in `cmd/estimatord/main.go` (depends on T026, T027, T010; contracts/http.md)
 
 **Checkpoint**: All three user stories independently functional — full quickstart.md passes end-to-end.
 
@@ -128,10 +128,10 @@ error report, then confirm a second `record-outcome` for the same id is rejected
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-- [ ] T030 [P] Write `README.md` at repo root: what this is, how to build (`make build`), how to run quickstart.md, link to `docs/sdd-estimate.md` and `specs/001-core-estimation-engine/`
-- [ ] T031 Run `make fmt vet test` from repo root; fix any findings until clean
-- [ ] T032 Manually execute all three quickstart.md scenarios end-to-end against a fresh `./data/estimator.db` and fix any drift found between docs and behavior
-- [ ] T033 [P] Add a top-level `internal/record/repository_test.go` asserting (via `go vet`-checkable interface satisfaction, not reflection) that no repository interface exposes an update/delete method — a lightweight guard for Constitution Principle VIII surviving future edits
+- [X] T030 [P] Write `README.md` at repo root: what this is, how to build (`make build`), how to run quickstart.md, link to `docs/sdd-estimate.md` and `specs/001-core-estimation-engine/`
+- [X] T031 Run `make fmt vet test` from repo root; fix any findings until clean
+- [X] T032 Manually execute all three quickstart.md scenarios end-to-end against a fresh `./data/estimator.db` and fix any drift found between docs and behavior
+- [X] T033 [P] Add a top-level `internal/record/repository_test.go` asserting (via `go vet`-checkable interface satisfaction, not reflection) that no repository interface exposes an update/delete method — a lightweight guard for Constitution Principle VIII surviving future edits
 
 ---
 
