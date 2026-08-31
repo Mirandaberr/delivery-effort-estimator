@@ -3,6 +3,6 @@
   "description": "Auto-derives a Delivery Effort prediction from a Spec-Kit feature's spec.md/plan.md/tasks.md, calling into the independent estimatorctl engine.",
   "version": "0.1.0",
   "author": {
-    "name": "jmirandev"
+    "name": "Mirandaberr"
   }
 }

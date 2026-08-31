@@ -1,4 +1,4 @@
-module github.com/jmirandev/delivery-effort-estimator
+module github.com/Mirandaberr/delivery-effort-estimator
 
 go 1.27.0
 

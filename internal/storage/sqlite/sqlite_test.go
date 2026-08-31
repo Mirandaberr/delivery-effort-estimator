@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/jmirandev/delivery-effort-estimator/internal/estimation"
-	"github.com/jmirandev/delivery-effort-estimator/internal/record"
+	"github.com/Mirandaberr/delivery-effort-estimator/internal/estimation"
+	"github.com/Mirandaberr/delivery-effort-estimator/internal/record"
 )
 
 func openTestStore(t *testing.T) *Store {

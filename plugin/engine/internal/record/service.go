@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jmirandev/delivery-effort-estimator/internal/estimation"
+	"github.com/Mirandaberr/delivery-effort-estimator/internal/estimation"
 )
 
 // Sentinel errors returned by Service, checkable with errors.Is.

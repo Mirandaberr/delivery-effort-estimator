@@ -13,7 +13,7 @@ import (
 
 	_ "modernc.org/sqlite"
 
-	"github.com/jmirandev/delivery-effort-estimator/internal/record"
+	"github.com/Mirandaberr/delivery-effort-estimator/internal/record"
 )
 
 // Store implements both record.EstimationRepository and

@@ -11,9 +11,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/jmirandev/delivery-effort-estimator/internal/estimation"
-	"github.com/jmirandev/delivery-effort-estimator/internal/record"
-	"github.com/jmirandev/delivery-effort-estimator/internal/storage/sqlite"
+	"github.com/Mirandaberr/delivery-effort-estimator/internal/estimation"
+	"github.com/Mirandaberr/delivery-effort-estimator/internal/record"
+	"github.com/Mirandaberr/delivery-effort-estimator/internal/storage/sqlite"
 )
 
 const defaultDBPath = "./data/estimator.db"

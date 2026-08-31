@@ -3,7 +3,7 @@ package record
 import (
 	"time"
 
-	"github.com/jmirandev/delivery-effort-estimator/internal/estimation"
+	"github.com/Mirandaberr/delivery-effort-estimator/internal/estimation"
 )
 
 // CalibrationVersion is the calibration state applied to every prediction

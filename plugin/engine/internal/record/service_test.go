@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/jmirandev/delivery-effort-estimator/internal/estimation"
+	"github.com/Mirandaberr/delivery-effort-estimator/internal/estimation"
 )
 
 func TestEstimateCreatesDistinctRecordsPerCall(t *testing.T) {
