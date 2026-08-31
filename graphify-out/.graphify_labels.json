@@ -1,0 +1,22 @@
+{
+  "0": "common.sh",
+  "1": "Tasks: [FEATURE NAME]",
+  "2": "Execution Steps",
+  "3": "speckit-analyze/SKILL.md",
+  "4": "4. Detection Passes (Token-Efficient Analysis)",
+  "5": "Feature Specification: [FEATURE NAME]",
+  "6": "speckit-plan/SKILL.md",
+  "7": "speckit-specify/SKILL.md",
+  "8": "speckit-tasks/SKILL.md",
+  "9": "Core Principles",
+  "10": "Core Principles",
+  "11": "create-new-feature.sh script",
+  "12": "Implementation Plan: [FEATURE]",
+  "13": "speckit-checklist/SKILL.md",
+  "14": "speckit-clarify/SKILL.md",
+  "15": "speckit-implement/SKILL.md",
+  "16": "speckit-constitution/SKILL.md",
+  "17": "speckit-taskstoissues/SKILL.md",
+  "18": "[CHECKLIST TYPE] Checklist: [FEATURE NAME]",
+  "19": "sdd-estimate.md"
+}
