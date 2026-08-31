@@ -30,3 +30,9 @@ vendor/
 .env
 .env.*
 !.env.example
+
+# Presentation: keep the Markdown source, ignore generated PDF/PPTX/HTML
+# (regenerate with `npx @marp-team/marp-cli presentacion.md --pdf/--pptx/--html`)
+presentacion/*.pdf
+presentacion/*.pptx
+presentacion/*.html
