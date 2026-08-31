@@ -22,8 +22,17 @@ Given a normalized 7-dimension feature vector for a work item, the engine:
 - accepts an `OutcomeRecord` once a work item is delivered;
 - computes an on-demand `ErrorReport` comparing prediction vs. actual.
 
-No feature extraction, no automatic calibration, and no Specification/Planning
-integration yet — those are follow-up features (see spec.md "Assumptions").
+No automatic calibration yet — that remains a follow-up feature (see
+specs/001's spec.md "Assumptions").
+
+## Claude Code plugin
+
+[`plugin/`](plugin/) is the Claude Code integration described in
+[`specs/002-feature-extraction-plugin/`](specs/002-feature-extraction-plugin/):
+after a Spec-Kit feature is specified and planned, it automatically derives
+the 7-dimension feature vector from `spec.md`/`plan.md`/`tasks.md` and calls
+this same engine to produce a prediction — no hand-authored features JSON
+needed. See [`plugin/README.md`](plugin/README.md) for install/usage.
 
 ## Build & test
 

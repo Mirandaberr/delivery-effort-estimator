@@ -1,0 +1,22 @@
+{
+  "context_complexity": 0.4,
+  "domain_complexity": 0.3,
+  "integration_complexity": 0.6,
+  "verification_complexity": 0.65,
+  "human_decision_load": 0.65,
+  "ai_execution_complexity": 0.6,
+  "uncertainty": 0.5,
+  "feature_directory": "specs/002-feature-extraction-plugin",
+  "derived_at": "2026-08-31T06:31:50Z",
+  "source_files": ["spec.md", "plan.md", "tasks.md"],
+  "justifications": {
+    "context_complexity": "Plan touches a new top-level plugin/ directory (manifest, hooks, skill, scripts, engine sync, tests) plus root Makefile/scripts additions; it interacts with the existing engine only through its already-documented CLI contract, not by reading or modifying internal/estimation or internal/record source (Constitution Check: 'zero changes to the existing engine packages').",
+    "domain_complexity": "Mostly mechanical file I/O, JSON shaping, and shell scripting glue rather than business-domain modeling; the main non-trivial judgment work was designing a consistent scoring rubric (research.md), not domain rules.",
+    "integration_complexity": "plan.md lists a Claude Code hook/skill integration, a Go-toolchain build step, and shelling out to the estimatorctl CLI as a subprocess -- 3+ distinct external touchpoints, landing near the '4+ touchpoints' band.",
+    "verification_complexity": "quickstart.md defines 4 manual end-to-end scenarios plus an automated section covering rebuild-avoidance, checksum-triggered rebuild, and missing-toolchain failure paths -- broad scenario coverage with real edge cases, though no regulated/regression-sensitive domain is involved.",
+    "human_decision_load": "Two explicit architectural trade-offs were escalated to the user before planning (automatic-hook-vs-manual-command; compile-on-install-vs-precompiled-binaries), and the plan itself required correcting an initially wrong hook-event choice (Stop vs PostToolUse) after verification.",
+    "ai_execution_complexity": "tasks.md lists 22 tasks spanning shell scripts, JSON configs, a Makefile, and a multi-step SKILL.md; implementation already required one real iteration (correcting derived-features.json from a nested to a flat shape after re-reading internal/estimation/features.go).",
+    "uncertainty": "spec.md's Assumptions section names 5 explicit assumptions (engine stays unmodified, derivation quality is bounded by underlying content quality, Go-toolchain requirement is acceptable, precompiled distribution is deferred) -- none currently blocking but several are real unresolved-until-used-in-practice unknowns."
+  },
+  "assumptions": []
+}

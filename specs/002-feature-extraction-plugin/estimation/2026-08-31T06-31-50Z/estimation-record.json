@@ -1,0 +1,36 @@
+{
+  "id": "50265801-8834-4579-b55d-0ffbdefdee15",
+  "work_item_id": "002-feature-extraction-plugin",
+  "timestamp": "2026-08-31T06:32:11.824828Z",
+  "specification_version": null,
+  "planning_version": null,
+  "repository_revision": null,
+  "features": {
+    "context_complexity": 0.4,
+    "domain_complexity": 0.3,
+    "integration_complexity": 0.6,
+    "verification_complexity": 0.65,
+    "human_decision_load": 0.65,
+    "ai_execution_complexity": 0.6,
+    "uncertainty": 0.5
+  },
+  "prediction": {
+    "delivery_effort_deu": 5.3025,
+    "confidence": 0.5,
+    "prediction_interval_p50": 5.3025,
+    "prediction_interval_p80": 8.6165625,
+    "human_effort": 0.5075000000000001,
+    "ai_effort": 0.495,
+    "verification_effort": 0.5825,
+    "integration_effort": 0.5399999999999999,
+    "risk_score": 0.5,
+    "risk_label": "medium",
+    "expected_duration_days": 1.0605,
+    "expected_ai_cost_usd": 0.78742125,
+    "expected_ai_cost_estimated": true
+  },
+  "risks": [],
+  "assumptions": [],
+  "model_version": "v1-linear",
+  "calibration_version": "uncalibrated"
+}

@@ -1,16 +1,16 @@
 # Graph Report - delivery-effort-estimator  (2026-08-31)
 
 ## Corpus Check
-- 57 files · ~45,334 words
+- 99 files · ~61,976 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 434 nodes · 607 edges · 29 communities (28 shown, 1 thin omitted)
-- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 36 edges (avg confidence: 0.8)
+- 678 nodes · 963 edges · 53 communities (41 shown, 12 thin omitted)
+- Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 83 edges (avg confidence: 0.83)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `93e8cfd6`
+- Built from commit: `a5f501a5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -37,42 +37,66 @@
 - Quickstart: Core Estimation Engine
 - Predict
 - Tasks: Core Estimation Engine
-- EstimationRecord
-- Service
+- Store
+- github.com/jmirandev/delivery-effort-estimator/internal/record.Service
 - estimatorctl/main.go
 - Phase 1 Data Model: Core Estimation Engine
 - Phase 0 Research: Core Estimation Engine
 - Contract: `estimatorctl` CLI
+- NewService
+- Implementation Plan: Feature Extraction Plugin
+- Service
+- Predict
+- Tasks: Feature Extraction Plugin
+- engine/cmd/estimatorctl/main.go
+- Phase 0 Research: Feature Extraction Plugin
+- Quickstart: Feature Extraction Plugin
+- Contract: `on-tasks-md-change.sh` (PostToolUse hook)
+- Contract: `estimate-feature` skill
+- Data Model: Feature Extraction Plugin
+- estimate-feature/SKILL.md
+- Contract: `plugin/scripts/ensure-engine.sh`
+- internal/record/repository.go
+- engine/internal/record/repository.go
+- test_ensure_engine.sh
+- test_locate_feature.sh
+- test_on_tasks_md_change.sh
+- ensure-engine.sh
+- locate-feature.sh
+- on-tasks-md-change.sh
+- check-plugin-engine-sync.sh
+- sync-plugin-engine.sh
+- github.com/jmirandev/delivery-effort-estimator
 - github.com/jmirandev/delivery-effort-estimator
 
 ## God Nodes (most connected - your core abstractions)
-1. `Service` - 19 edges
-2. `EstimationRecord` - 13 edges
-3. `Tasks: [FEATURE NAME]` - 13 edges
-4. `Tasks: Core Estimation Engine` - 13 edges
-5. `NewService()` - 12 edges
+1. `Tasks: [FEATURE NAME]` - 13 edges
+2. `Tasks: Core Estimation Engine` - 13 edges
+3. `NewService()` - 12 edges
+4. `Service` - 11 edges
+5. `Service` - 11 edges
 6. `Core Principles` - 11 edges
 7. `create-new-feature.sh script` - 10 edges
 8. `Predict()` - 10 edges
-9. `main()` - 9 edges
-10. `OutcomeRecord` - 9 edges
+9. `NewService()` - 10 edges
+10. `Predict()` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `main()` --calls--> `NewService()`  [EXTRACTED]
-  cmd/estimatorctl/main.go → internal/record/service.go
-- `main()` --calls--> `Open()`  [EXTRACTED]
-  cmd/estimatorctl/main.go → internal/storage/sqlite/sqlite.go
-- `runEstimate()` --references--> `Service`  [EXTRACTED]
-  cmd/estimatorctl/main.go → internal/record/service.go
-- `runGet()` --references--> `Service`  [EXTRACTED]
-  cmd/estimatorctl/main.go → internal/record/service.go
-- `runRecordOutcome()` --references--> `Service`  [EXTRACTED]
-  cmd/estimatorctl/main.go → internal/record/service.go
+- `minimalEstimationRecord()` --calls--> `Predict()`  [INFERRED]
+  internal/storage/sqlite/sqlite_test.go → internal/estimation/model.go
+- `openTestStore()` --calls--> `Open()`  [INFERRED]
+  internal/storage/sqlite/sqlite_test.go → internal/storage/sqlite/sqlite.go
+- `main()` --calls--> `NewService()`  [INFERRED]
+  plugin/engine/cmd/estimatorctl/main.go → plugin/engine/internal/record/service.go
+- `main()` --calls--> `Open()`  [INFERRED]
+  plugin/engine/cmd/estimatorctl/main.go → plugin/engine/internal/storage/sqlite/sqlite.go
+- `handleEstimateError()` --calls--> `IsMissingFeatureError()`  [INFERRED]
+  plugin/engine/cmd/estimatorctl/main.go → plugin/engine/internal/estimation/features.go
 
 ## Import Cycles
 - None detected.
 
-## Communities (29 total, 1 thin omitted)
+## Communities (53 total, 12 thin omitted)
 
 ### Community 0 - "common.sh"
 Cohesion: 0.13
@@ -91,8 +115,8 @@ Cohesion: 0.08
 Nodes (25): 1. Initialize Analysis Context, 2. Load Artifacts (Progressive Disclosure), 3. Build Semantic Models, 4. Detection Passes (Token-Efficient Analysis), 5. Severity Assignment, 6. Produce Compact Analysis Report, 7. Provide Next Actions, 8. Offer Remediation (+17 more)
 
 ### Community 4 - "testing.T"
-Cohesion: 0.14
-Nodes (25): MissingFeatureError, testing.T, IsMissingFeatureError(), ParseFeatures(), TestClampOutOfRangeValues(), TestClampWithinRangeProducesNoAssumptions(), TestParseFeaturesCompleteVector(), TestParseFeaturesInvalidJSON() (+17 more)
+Cohesion: 0.07
+Nodes (41): testing.T, EstimationFeatures, MissingFeatureError, IsMissingFeatureError(), ParseFeatures(), TestClampOutOfRangeValues(), TestClampWithinRangeProducesNoAssumptions(), TestParseFeaturesCompleteVector() (+33 more)
 
 ### Community 5 - "Feature Specification: [FEATURE NAME]"
 Cohesion: 0.15
@@ -151,24 +175,24 @@ Cohesion: 0.40
 Nodes (4): [Category 1], [Category 2], [CHECKLIST TYPE] Checklist: [FEATURE NAME], Notes
 
 ### Community 19 - "Quickstart: Core Estimation Engine"
-Cohesion: 0.09
-Nodes (18): Build & test, Delivery Effort Estimator, Project layout, Try it, What's implemented, Contract: `estimatord` HTTP JSON API, `GET /estimations/{estimationId}`, `GET /estimations/{estimationId}/error-report` (+10 more)
+Cohesion: 0.07
+Nodes (24): Delivery Effort Estimator — Claude Code Plugin, Directory layout, How it works, Install, What happens on first use, Build & test, Claude Code plugin, Delivery Effort Estimator (+16 more)
 
 ### Community 20 - "Predict"
-Cohesion: 0.14
-Nodes (17): ActualOutcome, DimensionError, Compute(), ErrorReport, TestComputeDimensionErrors(), EstimationFeatures, clampRange(), DeriveRisks() (+9 more)
+Cohesion: 0.15
+Nodes (18): Compute(), ActualOutcome, DimensionError, ErrorReport, Prediction, TestComputeDimensionErrors(), clampRange(), DeriveRisks() (+10 more)
 
 ### Community 21 - "Tasks: Core Estimation Engine"
 Cohesion: 0.08
 Nodes (24): Dependencies & Execution Order, Format: `[ID] [P?] [Story] Description`, Implementation for User Story 1, Implementation for User Story 2, Implementation for User Story 3, Implementation Strategy, Incremental Delivery, MVP First (User Story 1 Only) (+16 more)
 
-### Community 22 - "EstimationRecord"
-Cohesion: 0.15
-Nodes (9): database/sql.DB, time.Time, EstimationRecord, OutcomeRecord, migrate(), Open(), fakeEstimationRepo, fakeOutcomeRepo (+1 more)
+### Community 22 - "Store"
+Cohesion: 0.11
+Nodes (16): database/sql.DB, github.com/jmirandev/delivery-effort-estimator/internal/record.EstimationRecord, github.com/jmirandev/delivery-effort-estimator/internal/record.OutcomeRecord, migrate(), Store, Open(), migrate(), Store (+8 more)
 
-### Community 23 - "Service"
-Cohesion: 0.25
-Nodes (13): handleErrorReport(), handleEstimate(), handleGetEstimation(), handleRecordOutcome(), main(), writeError(), writeJSON(), net/http.HandlerFunc (+5 more)
+### Community 23 - "github.com/jmirandev/delivery-effort-estimator/internal/record.Service"
+Cohesion: 0.35
+Nodes (17): handleErrorReport(), handleEstimate(), handleGetEstimation(), handleRecordOutcome(), main(), writeError(), writeJSON(), github.com/jmirandev/delivery-effort-estimator/internal/record.Service (+9 more)
 
 ### Community 24 - "estimatorctl/main.go"
 Cohesion: 0.38
@@ -186,22 +210,74 @@ Nodes (7): Decision: Append-only schema enforces Constitution Principle VIII in 
 Cohesion: 0.40
 Nodes (4): Contract: `estimatorctl` CLI, `estimatorctl error-report`, `estimatorctl estimate`, `estimatorctl record-outcome`
 
+### Community 28 - "NewService"
+Cohesion: 0.13
+Nodes (19): EstimationRecord, OutcomeRecord, fakeEstimationRepo, fakeOutcomeRepo, newFakeEstimationRepo(), newFakeOutcomeRepo(), EstimationRecord, EstimationRepository (+11 more)
+
+### Community 29 - "Implementation Plan: Feature Extraction Plugin"
+Cohesion: 0.07
+Nodes (26): Content Quality, Feature Readiness, Notes, Requirement Completeness, Specification Quality Checklist: Feature Extraction Plugin, Complexity Tracking, Constitution Check, Documentation (this feature) (+18 more)
+
+### Community 30 - "Service"
+Cohesion: 0.14
+Nodes (14): github.com/jmirandev/delivery-effort-estimator/internal/estimation.ErrorReport, github.com/jmirandev/delivery-effort-estimator/internal/estimation.EstimationFeatures, github.com/jmirandev/delivery-effort-estimator/internal/estimation.Prediction, time.Time, EstimationRecord, EstimationRepository, OutcomeRecord, OutcomeRepository (+6 more)
+
+### Community 31 - "Predict"
+Cohesion: 0.15
+Nodes (18): Compute(), ActualOutcome, DimensionError, ErrorReport, Prediction, TestComputeDimensionErrors(), clampRange(), DeriveRisks() (+10 more)
+
+### Community 32 - "Tasks: Feature Extraction Plugin"
+Cohesion: 0.11
+Nodes (17): Dependencies & Execution Order, Format: `[ID] [P?] [Story] Description`, Implementation for User Story 1, Implementation for User Story 2, Implementation for User Story 3, Implementation Strategy, Incremental Delivery, MVP First (User Story 1 Only) (+9 more)
+
+### Community 33 - "engine/cmd/estimatorctl/main.go"
+Cohesion: 0.38
+Nodes (13): dbPath(), emitError(), fatal(), handleEstimateError(), handleOutcomeError(), handleReportError(), main(), printJSON() (+5 more)
+
+### Community 34 - "Phase 0 Research: Feature Extraction Plugin"
+Cohesion: 0.22
+Nodes (8): Decision: Automatic trigger via a PostToolUse hook that injects context, not a hook that reasons itself, Decision: Derivation rubric — concrete anchors per dimension, not open-ended judgment, Decision: Engine freshness check via a checksum marker, not a semantic version bump per sync, Decision: Feature-directory resolution is path-convention-based, not conversation-memory-based, Decision: Hook stdin parsing uses `grep`/`sed`, not `jq`, Decision: Output files live under a per-feature `estimation/` subdirectory, one timestamped pair per run, Graphify dependency-graph check (Constitution Principle X), Phase 0 Research: Feature Extraction Plugin
+
+### Community 35 - "Quickstart: Feature Extraction Plugin"
+Cohesion: 0.25
+Nodes (7): Automated coverage (scriptable), Prerequisites, Quickstart: Feature Extraction Plugin, Scenario 1 — Automatic estimation after planning (User Story 1), Scenario 2 — Derivation is auditable (User Story 2), Scenario 3 — Skipped, not broken, when preconditions aren't met (SC-005), Scenario 4 — Portable install (User Story 3)
+
+### Community 36 - "Contract: `on-tasks-md-change.sh` (PostToolUse hook)"
+Cohesion: 0.40
+Nodes (4): Behavior, Contract: `on-tasks-md-change.sh` (PostToolUse hook), Input (stdin), Output contract
+
+### Community 37 - "Contract: `estimate-feature` skill"
+Cohesion: 0.40
+Nodes (4): Contract: `estimate-feature` skill, Postconditions, Preconditions, Steps (contract, not prose — see SKILL.md for the full rubric text)
+
+### Community 38 - "Data Model: Feature Extraction Plugin"
+Cohesion: 0.40
+Nodes (4): Data Model: Feature Extraction Plugin, DerivedFeatureVector, PluginEngineBuild (operational state, not a domain entity), Reused entities (specs/001-core-estimation-engine, unchanged)
+
+### Community 39 - "estimate-feature/SKILL.md"
+Cohesion: 0.50
+Nodes (3): Never do this, Purpose, Steps
+
+### Community 40 - "Contract: `plugin/scripts/ensure-engine.sh`"
+Cohesion: 0.50
+Nodes (3): Behavior, Contract: `plugin/scripts/ensure-engine.sh`, Output contract
+
 ## Knowledge Gaps
-- **215 isolated node(s):** `common.sh script`, `github.com/jmirandev/delivery-effort-estimator`, `User Input`, `Pre-Execution Checks`, `Goal` (+210 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 232 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **287 isolated node(s):** `common.sh script`, `github.com/jmirandev/delivery-effort-estimator`, `EstimationRepository`, `OutcomeRepository`, `github.com/jmirandev/delivery-effort-estimator` (+282 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 325 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **12 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Service` connect `Service` to `estimatorctl/main.go`, `Predict`, `testing.T`, `EstimationRecord`?**
-  _High betweenness centrality (0.018) - this node is a cross-community bridge._
-- **Why does `EstimationRecord` connect `EstimationRecord` to `Predict`, `testing.T`, `Service`?**
-  _High betweenness centrality (0.009) - this node is a cross-community bridge._
-- **Why does `NewService()` connect `testing.T` to `estimatorctl/main.go`, `Service`?**
-  _High betweenness centrality (0.008) - this node is a cross-community bridge._
-- **What connects `common.sh script`, `github.com/jmirandev/delivery-effort-estimator`, `User Input` to the rest of the system?**
-  _215 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `NewService()` connect `NewService` to `engine/cmd/estimatorctl/main.go`, `github.com/jmirandev/delivery-effort-estimator/internal/record.Service`?**
+  _High betweenness centrality (0.024) - this node is a cross-community bridge._
+- **Why does `Service` connect `NewService` to `Service`?**
+  _High betweenness centrality (0.016) - this node is a cross-community bridge._
+- **Are the 8 inferred relationships involving `NewService()` (e.g. with `main()` and `main()`) actually correct?**
+  _`NewService()` has 8 INFERRED edges - model-reasoned connections that need verification._
+- **What connects `common.sh script`, `github.com/jmirandev/delivery-effort-estimator`, `EstimationRepository` to the rest of the system?**
+  _287 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `common.sh` be split into smaller, more focused modules?**
   _Cohesion score 0.12698412698412698 - nodes in this community are weakly interconnected._
 - **Should `Tasks: [FEATURE NAME]` be split into smaller, more focused modules?**

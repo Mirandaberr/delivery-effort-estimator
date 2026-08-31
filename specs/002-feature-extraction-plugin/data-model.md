@@ -12,19 +12,30 @@ the `estimate-feature` skill (FR-002, FR-003, FR-004).
 
 | Field | Type | Notes |
 |---|---|---|
+| `context_complexity`, `domain_complexity`, `integration_complexity`, `verification_complexity`, `human_decision_load`, `ai_execution_complexity`, `uncertainty` | float, each `[0,1]` | The 7 `EstimationFeatures` dimensions (specs/001), at the **top level** of the file, not nested — see below |
 | `feature_directory` | string | Repo-relative path, e.g. `specs/002-feature-extraction-plugin` |
 | `derived_at` | string (RFC3339, UTC) | When the derivation ran; also the containing directory's timestamp |
 | `source_files` | array of strings | Which of `spec.md`/`plan.md`/`tasks.md` were actually present and read |
-| `features` | object | The 7 `EstimationFeatures` fields (specs/001), each a float in `[0,1]` |
-| `justifications` | object | One key per dimension in `features`, each a 1-2 sentence string explaining the score, per the research.md rubric |
+| `justifications` | object | One key per dimension above, each a 1-2 sentence string explaining the score, per the research.md rubric |
 | `assumptions` | array of strings | Notes for any dimension scored conservatively due to missing/thin source content (mirrors the engine's own `Clamp()` assumption notes from specs/001) |
 
+**Why the 7 dimensions are flat, not nested under a `features` key**:
+`estimatorctl estimate --features <path>` (specs/001/contracts/cli.md) is
+passed this exact file. Its `ParseFeatures` (internal/estimation/features.go)
+reads the 7 dimension names directly off the top-level JSON object and
+ignores any other top-level keys it doesn't recognize — it does **not**
+look inside a nested `features` object. So `derived-features.json` doubles
+as the CLI's `--features` input verbatim: `feature_directory`,
+`justifications`, etc. are the "harmless extra keys" `ParseFeatures` ignores
+(contracts/skill.md step 5).
+
 **Validation rules**:
-- Every key in `features` MUST have a matching key in `justifications` — a
-  score with no justification is invalid output (FR-003 is not optional).
-- `features` values MUST already be in `[0,1]`; the skill is responsible for
-  producing valid input, but `estimatorctl` still clamps defensively
-  (specs/001 `Clamp()`) since it is a separate process boundary.
+- Every one of the 7 dimension keys MUST have a matching key in
+  `justifications` — a score with no justification is invalid output
+  (FR-003 is not optional).
+- The 7 dimension values MUST already be in `[0,1]`; the skill is
+  responsible for producing valid input, but `estimatorctl` still clamps
+  defensively (specs/001 `Clamp()`) since it is a separate process boundary.
 
 **State transitions**: None — immutable once written, like `EstimationRecord`.
 A new derivation for the same feature directory is a new directory under
@@ -32,8 +43,8 @@ A new derivation for the same feature directory is a new directory under
 
 ## Reused entities (specs/001-core-estimation-engine, unchanged)
 
-- **EstimationFeatures** — the `features` object above, once validated,
-  becomes exactly this type when passed to `estimatorctl estimate`.
+- **EstimationFeatures** — the 7 top-level dimension fields above, once
+  validated, are read directly as this type by `estimatorctl estimate`.
 - **Prediction / EstimationRecord** — the unmodified output of
   `estimatorctl estimate`, saved verbatim as
   `specs/<id>-*/estimation/<UTC-timestamp>/estimation-record.json`.
